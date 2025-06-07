@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <stdint.h>
+
+int main() {
+    union {
+        uint32_t val;
+        uint8_t bytes[4];
+    } test;
+
+    test.val = 0x01020304;
+
+    printf("Byte order: ");
+    for (int i = 0; i < 4; i++) {
+        printf("%02x ", test.bytes[i]);
+    }
+    printf("\n");
+
+    if (test.bytes[0] == 0x04) {
+        printf("System is little-endian.\n");
+    } else if (test.bytes[0] == 0x01) {
+        printf("System is big-endian.\n");
+    } else {
+        printf("Unknown endianness.\n");
+    }
+
+    return 0;
+}
+Explanation:
+The 32-bit integer 0x01020304 in memory will be stored differently depending on endianness.
+
+Little-endian stores 0x04 at the lowest address (bytes[0]).
+
+Big-endian stores 0x01 at the lowest address (bytes[0]).
+
