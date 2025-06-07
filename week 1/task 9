@@ -1,0 +1,44 @@
+✅ 9. Inline Assembly Basics (Read CSR Cycle Counter)
+🧪 Step 1: Minimal C Function to Read cycle CSR (0xC00)
+c
+Copy
+Edit
+static inline uint32_t rdcycle(void) {
+    uint32_t c;
+    asm volatile ("csrr %0, cycle" : "=r"(c));
+    return c;
+}
+✅ This uses inline assembly to access the cycle counter directly from the CPU.
+
+🧠 Step 2: Explanation
+Part	Meaning
+static inline	Ensures the function is inlined (no call overhead)
+asm volatile	Prevents GCC from optimizing away the inline assembly
+"csrr %0, cycle"	RISC-V instruction: Copy CSR cycle to register %0
+: "=r"(c)	Output constraint: put result in a general-purpose register (=r)
+c	C variable that will receive the value
+
+📌 Constraint Breakdown
+Constraint	Meaning
+"=r"(c)	= means output only, r = use a general-purpose register
+volatile	Tells compiler not to remove or reorder this instruction
+csrr	RISC-V instruction: CSR Read (from address of cycle = 0xC00)
+%0	Refers to the first output operand (in this case, c)
+
+🧪 Bonus: Read High-Precision cycle Value (64-bit safe)
+On 32-bit systems, use this pattern to avoid overflow:
+
+c
+Copy
+Edit
+uint64_t rdcycle64(void) {
+    uint32_t hi, lo, hi2;
+    do {
+        asm volatile ("csrr %0, cycleh" : "=r"(hi));
+        asm volatile ("csrr %0, cycle"  : "=r"(lo));
+        asm volatile ("csrr %0, cycleh" : "=r"(hi2));
+    } while (hi != hi2);
+    return ((uint64_t)hi << 32) | lo;
+}
+✅ This double-read ensures you don’t catch a rollover mid-read.
+|
