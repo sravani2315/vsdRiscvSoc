@@ -1,74 +1,40 @@
-🛠️ RISC-V Toolchain Setup Guide (RV32IMAC)
-
-This guide walks you through unpacking the RISC-V toolchain, setting up your environment, and verifying the installation on a Linux system.
-
----   
-
-📦 1. Unpack the Toolchain
-
-Open a terminal and extract the toolchain archive:
-
+✅ Install & Sanity-Check RISC-V Toolchain (rv32imac)
+🔧 1. Unpack the Toolchain
+Assuming you downloaded riscv-toolchain-rv32imac-x86_64-ubuntu.tar.gz into your home directory or ~/Downloads:
 
 bash
-tar -xvzf riscv-toolchain-rv32imac-x86_64-ubuntu.tar.gz
-```
+Copy
+Edit
+# Navigate to your preferred install location
+cd $HOME
 
-This will extract a folder, typically named `opt` or `riscv-toolchain`, containing the toolchain binaries.
+# Extract the tar.gz file (adjust path if needed)
+tar -xzf ~/Downloads/riscv-toolchain-rv32imac-x86_64-ubuntu.tar.gz
+✅ This will create a directory like riscv or similar in your home folder.
 
----
+🛠️ 2. Add Toolchain to PATH
+To make the RISC-V tools globally available, add the following to your ~/.bashrc:
 
-📁 2. Locate the `bin/` Directory
+bash
+Copy
+Edit
+# Add to ~/.bashrc
+echo 'export PATH=$HOME/riscv/bin:$PATH' >> ~/.bashrc
 
-Navigate to the extracted folder’s `bin` directory:
-
-```cd /path/to/extracted/folder/opt/riscv/bin```
-
-> Replace `/path/to/extracted/folder` with the actual path to the extracted contents.
-
-List the contents to verify:
-
-```bash
-ls
-```
-
-You should see executables such as:
-
-* `riscv32-unknown-elf-gcc`
-* `riscv32-unknown-elf-objdump`
-* `riscv32-unknown-elf-gdb`
-
----
-🌐 3. Add Toolchain to Your `PATH`
-
-🔹 Temporary (Current Session Only)
-
-```bash
-export PATH="$PWD:$PATH"
-```
-🔹 Permanent (Recommended)
-
-🔸 For **Bash** users:
-
-```bash
-echo 'export PATH="/home/naren/Desktop/VSD/opt/riscv/bin:$PATH"' >> ~/.bashrc
+# Apply the changes immediately
 source ~/.bashrc
-```
+📝 Note: Replace $HOME/riscv/bin with the actual path if it differs after extraction (e.g., $HOME/riscv-toolchain/bin).
 
-> Adjust the path if your toolchain is located elsewhere.
+✅ 3. Sanity Check – Confirm Tools Are Working
+Run the following commands to verify installation:
 
----
-
-✅ 4. Verify the Installation
-
-Run the following commands to check if the toolchain is accessible:
-
-```bash
+bash
+Copy
+Edit
 riscv32-unknown-elf-gcc --version
 riscv32-unknown-elf-objdump --version
 riscv32-unknown-elf-gdb --version
-```
+✅ If correctly installed, each command should print version information.
 
-If installed correctly, these commands will return version information for each tool.
 
----
 
