@@ -1,0 +1,29 @@
+/* minimal.ld - minimal linker script for RV32IMC */
+
+SECTIONS
+{
+    /* Place .text at 0x00000000 (usually flash/ROM) */
+    .text 0x00000000 : 
+    {
+        *(.text*)          /* all .text sections from input files */
+    }
+
+    /* Place .data at 0x10000000 (usually SRAM/RAM) */
+    .data 0x10000000 :
+    {
+        *(.data*)          /* all .data sections from input files */
+    }
+}
+Explanation: Why Flash vs SRAM addresses differ
+.text section at 0x00000000:
+This usually corresponds to Flash memory (or ROM) in embedded systems. Flash is non-volatile and stores the executable code and constant data permanently. The processor fetches instructions from this memory area.
+
+.data section at 0x10000000:
+This corresponds to SRAM (RAM) — a volatile memory region where initialized variables are stored at runtime. The .data section holds initialized global and static variables, which are copied from Flash to SRAM during startup before the program runs.
+
+Because Flash and SRAM have different physical memory locations and purposes, their address ranges are different:
+
+Flash address space is often lower (e.g., starting at 0x00000000) because it’s mapped as the code memory.
+
+SRAM address space is mapped separately (e.g., starting at 0x10000000) to provide fast read/write access for variable storage.
+
