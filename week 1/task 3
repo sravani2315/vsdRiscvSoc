@@ -1,0 +1,42 @@
+✅ 3. From C to Assembly
+🛠️ Step 1: Generate Assembly (.s) File
+Use the following command to compile your hello.c file to human-readable assembly:
+
+bash
+Copy
+Edit
+riscv32-unknown-elf-gcc -S -O0 -march=rv32imc -mabi=ilp32 hello.c
+✅ This generates hello.s in the same directory.
+
+-S: Tells GCC to stop after generating assembly.
+
+-O0: Disables optimization for easier reading.
+
+-march=rv32imc & -mabi=ilp32: Specify ISA and ABI.
+
+🧠 Step 2: Understand the Function Prologue and Epilogue
+Open hello.s, and you’ll typically see code like this inside the main function:
+
+assembly
+Copy
+Edit
+main:
+    addi    sp,sp,-16        # Allocate 16 bytes on stack
+    sw      ra,12(sp)        # Save return address (ra) at offset 12
+    sw      s0,8(sp)         # Save frame pointer (s0) at offset 8
+    addi    s0,sp,16         # Set new frame pointer
+    ...
+    lw      ra,12(sp)        # Restore return address before return
+    lw      s0,8(sp)         # Restore frame pointer
+    addi    sp,sp,16         # Deallocate 16 bytes of stack
+    ret                      # Return to caller
+📘 Explanation:
+addi sp, sp, -16: Makes room on the stack (stack grows downward).
+
+sw ra,12(sp): Saves the return address to stack, so it can be restored before returning.
+
+sw s0,8(sp): Saves frame pointer (s0), which helps manage local variables.
+
+addi s0, sp, 16: Initializes frame pointer to the original sp.
+
+The epilogue does the reverse: restores saved registers and adjusts the stack back.
