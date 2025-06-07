@@ -1,0 +1,53 @@
+✅ 4. Hex Dump & Disassembly
+🔍 Step 1: Disassemble the ELF File
+Run this command to create a readable assembly dump of the ELF:
+
+bash
+Copy
+Edit
+riscv32-unknown-elf-objdump -d hello.elf > hello.dump
+✅ This generates hello.dump containing disassembled code.
+
+To view it directly in terminal:
+
+bash
+Copy
+Edit
+riscv32-unknown-elf-objdump -d hello.elf
+📦 Step 2: Generate a Raw Intel HEX File
+bash
+Copy
+Edit
+riscv32-unknown-elf-objcopy -O ihex hello.elf hello.hex
+✅ This creates a hello.hex file in Intel HEX format (often used for flashing microcontrollers).
+
+If you want a binary version:
+
+bash
+Copy
+Edit
+riscv32-unknown-elf-objcopy -O binary hello.elf hello.bin
+🧠 Step 3: Understand Disassembly Output
+Example snippet from hello.dump:
+
+yaml
+Copy
+Edit
+00010074 <main>:
+   10074: 1141                 addi sp,sp,-16
+   10076: c606                 sw ra,12(sp)
+   10078: c422                 sw s0,8(sp)
+   1007a: 842a                 mv s0,sp
+Each line can be broken down as:
+
+Field	Meaning
+10074:	Memory address of the instruction
+1141	Hex-encoded opcode (actual instruction bits)
+addi sp,sp,-16	Assembly instruction: mnemonic + operands
+
+✅ Summary
+Task	Command
+Disassemble ELF	riscv32-unknown-elf-objdump -d hello.elf
+Generate Intel HEX	riscv32-unknown-elf-objcopy -O ihex hello.elf hello.hex
+Create binary image	riscv32-unknown-elf-objcopy -O binary hello.elf hello.bin
+View opcode & assembly	Examine: Address, Opcode, Mnemonic, Operands
