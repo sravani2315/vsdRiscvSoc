@@ -1,0 +1,67 @@
+Atomic Spinlock Using LR/SC on RV32
+c
+Copy
+Edit
+#include <stdint.h>
+
+volatile uint32_t lock = 0;  // 0 = unlocked, 1 = locked
+
+// Spinlock lock function using lr.w/sc.w
+void spinlock_lock(volatile uint32_t *lock_addr) {
+    uint32_t tmp;
+
+    do {
+        asm volatile (
+            "   lr.w   %[tmp], (%[addr])       \n" // load reserved
+            "   bnez   %[tmp], 1f              \n" // if locked, branch to label 1 (retry)
+            "   li     %[tmp], 1               \n" // prepare to store 1 (lock acquired)
+            "   sc.w   %[tmp], %[tmp], (%[addr]) \n" // attempt to store conditionally
+            "   bnez   %[tmp], 1f              \n" // if store failed, retry
+            "1:                                 \n"
+            : [tmp] "=&r" (tmp)
+            : [addr] "r" (lock_addr)
+            : "memory"
+        );
+    } while (tmp != 0); // repeat until sc succeeds (tmp==0 means success)
+}
+
+void spinlock_unlock(volatile uint32_t *lock_addr) {
+    // Release lock by writing 0 (no atomic needed here)
+    *lock_addr = 0;
+}
+
+// Simulated thread 1
+void thread1(void) {
+    spinlock_lock(&lock);
+    // Critical section start
+    // Do some work protected by the lock
+    // ...
+    spinlock_unlock(&lock);
+}
+
+// Simulated thread 2
+void thread2(void) {
+    spinlock_lock(&lock);
+    // Critical section start
+    // Do some work protected by the lock
+    // ...
+    spinlock_unlock(&lock);
+}
+
+int main(void) {
+    // Simulate threads running one after the other
+    thread1();
+    thread2();
+
+    return 0;
+}
+Explanation:
+spinlock_lock tries to atomically set lock from 0 to 1 using LR/SC loop.
+
+If the lock is already held (lock != 0), it spins (busy-waits).
+
+spinlock_unlock releases the lock by setting it back to 0.
+
+The two “threads” are simulated as sequential calls (thread1 and thread2) for demonstration.
+
+In a real multicore system, each thread would run concurrently.
