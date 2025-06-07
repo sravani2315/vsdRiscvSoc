@@ -1,0 +1,59 @@
+✅ 6. Stepping with riscv32-unknown-elf-gdb
+This guide assumes you're using the GDB built with the RISC-V simulator backend, often called gdbsim.
+
+🧪 Step-by-Step: Start GDB and Run Your ELF
+🛠️ 1. Launch GDB with your ELF
+bash
+Copy
+Edit
+riscv32-unknown-elf-gdb hello.elf
+🖥️ 2. Start the RISC-V Simulator
+gdb
+Copy
+Edit
+(gdb) target sim
+✅ This tells GDB to run your program inside its built-in RISC-V simulator.
+
+⛔ 3. Set a Breakpoint at main
+gdb
+Copy
+Edit
+(gdb) break main
+🛑 Sets a breakpoint before the main() function begins.
+
+▶️ 4. Run the Program
+gdb
+Copy
+Edit
+(gdb) run
+🏃 Program runs until main is hit.
+
+🪜 5. Step Through Instructions
+gdb
+Copy
+Edit
+(gdb) stepi      # Step one instruction
+(gdb) nexti      # Step over one instruction
+🧠 6. Inspect Registers
+gdb
+Copy
+Edit
+(gdb) info registers       # View all general-purpose registers
+(gdb) info registers a0    # View specific register
+🧩 7. Disassemble Code at Current PC
+gdb
+Copy
+Edit
+(gdb) disassemble
+Shows surrounding assembly instructions near the program counter (PC).
+
+🧾 Summary of Common GDB Commands
+Command	Description
+target sim	Connect to RISC-V simulator
+break main	Set breakpoint at main()
+run	Start execution
+stepi / nexti	Step instruction / step over
+info registers	View all registers
+info reg a0	View specific register
+disassemble	Show nearby assembly
+quit	Exit GDB
