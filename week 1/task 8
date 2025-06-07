@@ -1,0 +1,82 @@
+✅ 8. Exploring GCC Optimization (-O0 vs -O2)
+We’ll compare the assembly output of the same file with two optimization levels:
+
+🧪 Step 1: Compile with No Optimization (-O0)
+bash
+Copy
+Edit
+riscv32-unknown-elf-gcc -S -O0 -march=rv32imc -mabi=ilp32 hello.c -o hello_O0.s
+Produces very verbose, readable assembly.
+
+No optimizations; stack frames, loads/stores are explicit.
+
+⚡ Step 2: Compile with Optimizations (-O2)
+bash
+Copy
+Edit
+riscv32-unknown-elf-gcc -S -O2 -march=rv32imc -mabi=ilp32 hello.c -o hello_O2.s
+Produces shorter, faster code.
+
+Includes optimizations like dead-code elimination, constant folding, better register use.
+
+🔍 Example Comparison
+Source code (hello.c):
+
+c
+Copy
+Edit
+#include <stdio.h>
+
+int main() {
+    printf("Hello\n");
+    return 0;
+}
+📄 -O0 Assembly Excerpt:
+assembly
+Copy
+Edit
+main:
+    addi    sp,sp,-16
+    sw      ra,12(sp)
+    sw      s0,8(sp)
+    ...
+    call    printf
+    li      a5,0
+    mv      a0,a5
+    ...
+✅ Visible traits:
+
+Stack frame is manually built (addi sp,sp,-16, sw ra,...)
+
+mv and li used instead of direct returns
+
+Slower, but easier to debug
+
+⚡ -O2 Assembly Excerpt:
+assembly
+Copy
+Edit
+main:
+    lui     a0,%hi(.LC0)
+    addi    a0,a0,%lo(.LC0)
+    tail    printf
+✅ Optimized traits:
+
+No stack frame unless needed
+
+Uses tail printf to reduce function call overhead
+
+Immediate values and addresses folded in-place
+
+💡 Key Optimization Concepts
+Optimization	What It Does
+Dead-Code Elimination	Removes unused variables, functions, etc.
+Register Allocation	Minimizes memory access by reusing registers
+Inlining	Inserts small function bodies directly to reduce calls
+Tail Call Optimization	Converts function call + return into a jump
+Constant Folding	Computes constant expressions at compile time
+
+✅ Summary
+Flag	Result
+-O0	Debug-friendly, readable, inefficient
+-O2	Optimized for performance, compact, less human-readable
