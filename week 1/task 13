@@ -1,0 +1,69 @@
+1. Enable machine-timer interrupt (MTIP)
+The machine timer interrupt fires when mtime >= mtimecmp.
+
+You enable it by setting MTIE (Machine Timer Interrupt Enable) bit in the mie CSR.
+
+Also, enable global machine interrupts by setting the MIE bit in the mstatus CSR.
+
+2. Setup mtimecmp to schedule the timer interrupt
+Assume memory-mapped mtime and mtimecmp registers are located at specific addresses (platform-dependent):
+
+c
+Copy
+Edit
+#define MTIME       (*(volatile unsigned long long *)0x0200BFF8)
+#define MTIMECMP    (*(volatile unsigned long long *)0x02004000)
+
+#define MIE_MTIE    (1 << 7)   // Machine Timer Interrupt Enable bit in mie
+#define MSTATUS_MIE (1 << 3)   // Machine Interrupt Enable bit in mstatus
+3. Write a simple interrupt handler in C (GCC)
+c
+Copy
+Edit
+#include <stdint.h>
+
+// Forward declaration of ISR
+void __attribute__((interrupt)) MachineTimerHandler(void);
+
+void enable_machine_timer_interrupt(void) {
+    // Set mtimecmp to some value in the future
+    MTIMECMP = MTIME + 1000000ULL;  // schedule timer interrupt
+
+    // Enable Machine Timer Interrupt in mie CSR
+    asm volatile ("csrs mie, %0" :: "r"(MIE_MTIE));
+
+    // Enable global machine interrupts in mstatus CSR
+    asm volatile ("csrs mstatus, %0" :: "r"(MSTATUS_MIE));
+}
+
+// Machine Timer ISR
+void __attribute__((interrupt)) MachineTimerHandler(void) {
+    // Acknowledge the interrupt by updating mtimecmp again
+    MTIMECMP += 1000000ULL;
+
+    // User code: toggle an LED, increment a counter, etc.
+}
+Explanation:
+The __attribute__((interrupt)) tells GCC this is an interrupt handler with proper prologue/epilogue.
+
+Writing to mtimecmp schedules the next timer interrupt.
+
+csrs assembly instructions set bits in mie and mstatus registers.
+
+Alternative: Naked ISR with manual assembly (for advanced users)
+If you want full control:
+
+c
+Copy
+Edit
+void MachineTimerHandler(void) __attribute__((naked));
+void MachineTimerHandler(void) {
+    __asm__ volatile(
+        "addi sp, sp, -16\n"       // Save registers (simplified)
+        "sw ra, 12(sp)\n"
+        // handler code...
+        "lw ra, 12(sp)\n"
+        "addi sp, sp, 16\n"
+        "mret\n"                   // Return from interrupt
+    );
+}
