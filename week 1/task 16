@@ -1,0 +1,41 @@
+1. Implement _write syscall
+The standard library printf eventually calls _write to output bytes. You need to implement _write so it sends data to your UART hardware.
+
+Assuming your UART transmit register is at a known address, for example:
+
+c
+Copy
+Edit
+#define UART_TX_REG (*(volatile unsigned char *)0x10000000)
+Implement _write like this:
+
+c
+Copy
+Edit
+#include <unistd.h>
+
+int _write(int fd, const char *buf, int len) {
+    (void)fd;  // usually ignored for bare-metal UART
+
+    for (int i = 0; i < len; i++) {
+        // Wait for UART ready if needed (depends on your UART hardware)
+        // Example: while (!(UART_STATUS_REG & TX_READY_BIT));
+
+        UART_TX_REG = buf[i];  // send one byte
+    }
+
+    return len;  // number of bytes written
+}
+2. Link with minimal startup
+Compile with -nostartfiles to avoid standard system startup files that expect an OS.
+
+Provide your own syscalls.c or minimal syscall implementations including _write.
+
+Use a linker script placing your code and .data/.bss properly.
+
+3. Summary
+printf calls _write internally.
+
+Your _write sends bytes one by one to UART's TX register.
+
+This allows using standard printf in a bare-metal RISC-V program.
