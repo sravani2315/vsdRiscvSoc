@@ -1,0 +1,31 @@
+What does crt0.S typically do in a bare-metal RISC-V program?
+crt0.S (C runtime zero) is the start-up assembly code executed right after reset and before the C runtime (main) begins. Its typical responsibilities are:
+
+Set up the stack pointer (SP)
+Initialize the stack pointer to a valid RAM location so function calls and local variables work properly.
+
+Clear the .bss section
+The .bss segment holds zero-initialized global and static variables. crt0.S zeroes out this memory region to ensure variables start with zero.
+
+Copy .data from Flash to RAM (if applicable)
+Initialized variables stored in Flash must be copied to RAM for correct runtime behavior (sometimes done here or in startup code).
+
+Call the main() function
+Transfers control to the C program entry point.
+
+Enter an infinite loop after main returns
+Since bare-metal programs usually have nowhere to return, an infinite loop prevents unpredictable behavior.
+
+Where to get a crt0.S for RISC-V?
+Device-specific SDKs or BSPs
+Many RISC-V chip vendors provide their own startup assembly code in their board support packages.
+
+Newlib startup files
+The riscv-newlib project contains crt0.S and startup files tailored for RISC-V bare-metal environments.
+You can find these in the Newlib source or the RISC-V GNU toolchain repo.
+
+Open-source projects and templates
+Projects like SiFive Freedom SDK, Freedom E SDK, and examples in RISC-V embedded frameworks provide example crt0.S.
+
+Write your own minimal startup
+For learning or custom setups, you can write a simple crt0.S yourself using standard assembly instructions following the tasks above.
