@@ -1,0 +1,41 @@
+✅ 2. Compile “Hello, RISC-V”
+📄 Step 1: Create a Minimal C Program
+Save this to a file named hello.c:
+
+c
+Copy
+Edit
+#include <stdio.h>
+
+int main() {
+    printf("Hello, RISC-V!\n");
+    return 0;
+}
+🛠️ Step 2: Compile for RV32IMC
+Run this in your terminal:
+
+bash
+Copy
+Edit
+riscv32-unknown-elf-gcc -march=rv32imc -mabi=ilp32 -o hello.elf hello.c
+✅ This command:
+
+Uses the -march=rv32imc to target RV32IMC ISA,
+
+Specifies -mabi=ilp32 for the integer ABI,
+
+Produces an ELF file named hello.elf.
+
+🧪 Step 3: Verify the ELF Output
+Use the file command to check the output ELF:
+
+bash
+Copy
+Edit
+file hello.elf
+✅ Expected output:
+
+arduino
+Copy
+Edit
+hello.elf: ELF 32-bit LSB executable, UCB RISC-V, ...
