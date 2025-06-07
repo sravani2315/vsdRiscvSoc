@@ -1,0 +1,49 @@
+✅ 10. Memory-Mapped I/O Demo (GPIO Toggle)
+🧪 Minimal Bare-Metal Code to Toggle GPIO at 0x10012000
+c
+Copy
+Edit
+#include <stdint.h>
+
+void toggle_gpio() {
+    volatile uint32_t *gpio = (uint32_t *)0x10012000;
+    *gpio = 0x1;  // Set GPIO high
+}
+✅ This writes 0x1 to a memory-mapped GPIO register — for example, to turn on an LED or set an output pin high.
+
+🧠 Explanation
+Code Element	Purpose
+volatile	Prevents the compiler from optimizing out the store
+uint32_t *gpio = (uint32_t *)...	Casts the address to a 32-bit pointer to access the register
+*gpio = 0x1;	Performs the write — this becomes a sw or sb in assembly
+
+❗ Why Use volatile?
+Without volatile, the compiler may assume the pointer has no observable effect and remove or reorder the write.
+
+c
+Copy
+Edit
+// Compiler *might remove* this if volatile is missing:
+uint32_t *gpio = (uint32_t *)0x10012000;
+*gpio = 0x1;  // Might get optimized away!
+✅ volatile forces the compiler to actually emit the store every time, even if it seems “unused.”
+
+📏 Word Alignment Note
+Since the register is declared as a uint32_t *, the address (0x10012000) must be 32-bit aligned.
+
+If your GPIO controller only supports 8-bit or 16-bit writes, use:
+
+volatile uint8_t *gpio8 = (uint8_t *)0x10012000;
+
+or volatile uint16_t *gpio16 = (uint16_t *)0x10012000;
+
+🔁 Example: Toggle On and Off
+c
+Copy
+Edit
+void blink_gpio() {
+    volatile uint32_t *gpio = (uint32_t *)0x10012000;
+    *gpio = 0x1;    // Set high
+    for (volatile int i = 0; i < 100000; ++i);  // Delay loop
+    *gpio = 0x0;    // Set low
+}
