@@ -1,0 +1,22 @@
+✅ 7. Running Under an Emulator (Spike or QEMU)
+If you don’t yet have real RISC-V hardware, you can run your hello.elf on Spike or QEMU and see output on a simulated UART console.
+
+🦉 Option 1: Run with Spike (ISA Simulator)
+🔹 Spike requires a RISC-V proxy kernel (usually pk) to handle basic I/O.
+
+📦 Command:
+bash
+Copy
+Edit
+spike --isa=rv32imc pk hello.elf
+Requirements:
+spike (RISC-V ISA simulator)
+
+pk (proxy kernel from riscv-pk)
+
+🖨️ Output:
+If hello.elf calls printf("Hello, RISC-V!\n");, Spike + pk will print:
+
+Copy
+Edit
+Hello, RISC-V!
