@@ -1,0 +1,32 @@
+What is the ‘A’ in rv32imac?
+The ‘A’ stands for Atomic instructions extension.
+
+It adds atomic memory operations that allow multiple instructions to perform read-modify-write operations atomically (without interruption).
+
+These instructions are critical for synchronization primitives like mutexes, spinlocks, semaphores, and for building lock-free data structures.
+
+Key atomic instructions added:
+LR.W (Load Reserved Word)
+Loads a word and marks the address for an atomic update.
+
+SC.W (Store Conditional Word)
+Stores a word only if no conflicting writes occurred since the corresponding LR.W.
+
+AMOSWAP.W
+Atomically swaps a register and memory.
+
+AMOADD.W
+Atomically adds a register to memory.
+
+AMOXOR.W, AMOAND.W, AMOOR.W, AMOMIN.W, AMOMAX.W, AMOMINU.W, AMOMAXU.W
+Atomic bitwise and min/max operations.
+
+Why is this useful?
+Enables lock-free synchronization in operating systems, multithreaded applications, and real-time kernels.
+
+Provides hardware support for atomic read-modify-write sequences, avoiding complex software locking schemes.
+
+Improves performance and correctness in concurrent environments.
+
+In contrast:
+rv32imc lacks this ‘A’ extension, so atomic operations must be emulated in software, which is slower and more error-prone.
