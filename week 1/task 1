@@ -20,7 +20,6 @@ This will extract a folder, typically named `opt` or `riscv-toolchain`, containi
 📁 2. Locate the `bin/` Directory
 
 Navigate to the extracted folder’s `bin` directory:
-<pre> ```bash riscv32-unknown-elf-gcc -o hello hello.c spike pk hello ``` </pre>
 
 ```cd /path/to/extracted/folder/opt/riscv/bin```
 
@@ -53,13 +52,6 @@ export PATH="$PWD:$PATH"
 ```bash
 echo 'export PATH="/home/naren/Desktop/VSD/opt/riscv/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
-```
-
-🔸 For **Zsh** users:
-
-```bash
-echo 'export PATH="/home/naren/Desktop/VSD/opt/riscv/bin:$PATH"' >> ~/.zshrc
-source ~/.zshrc
 ```
 
 > Adjust the path if your toolchain is located elsewhere.
