@@ -1,0 +1,42 @@
+✅ Step 1: Run VCS for Elaboration
+Execute the following command in your project root directory (where rtl/caravel.v exists):
+
+bash
+Copy
+Edit
+vcs -full64 -sverilog rtl/caravel.v \
+-o /tmp/tmp.vpd \
+-debug_access+none \
+-kdb
+🔍 What this does:
+-full64: Enables 64-bit compilation
+
+-sverilog: Enables SystemVerilog
+
+-o /tmp/tmp.vpd: Output VPD (waveform) file path
+
+-debug_access+none: No debug info for now (can be changed later)
+
+-kdb: Enables hierarchy and structural database generation
+
+✅ Step 2: Locate the Hierarchy Report
+After elaboration completes successfully, VCS generates a module hierarchy report at:
+
+bash
+Copy
+Edit
+csrc/DVEfiles/hierarchy.txt
+If DVEfiles doesn't appear right away, you can manually inspect inside the csrc/ directory:
+
+bash
+Copy
+Edit
+find csrc/ -name hierarchy.txt
+✅ Step 3: Copy the Hierarchy File
+Move or copy the file into your documentation directory for Week 2:
+
+bash
+Copy
+Edit
+mkdir -p docs/
+cp csrc/DVEfiles/hierarchy.txt docs/
