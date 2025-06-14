@@ -1,0 +1,52 @@
+✅ Step-by-Step Instructions
+🔗 1. Visit the Top Module
+Go to the top module caravel.v on GitHub**
+This is the top-level RTL for the Caravel SoC, which integrates user design with the management SoC.
+
+📄 2. Create a New Markdown File
+Create a file named:
+
+Copy
+Edit
+week2_notes.md
+Inside it, answer the following:
+
+📘 week2_notes.md
+markdown
+Copy
+Edit
+# Week 2 Notes – caravel.v Analysis
+
+## 1. Major Sub-modules Instantiated Inside caravel
+
+The four major sub-modules instantiated inside `caravel.v` are:
+
+1. **mgmt_core_wrapper** – Management SoC core wrapper, includes CPU and peripheral management.
+2. **user_project_wrapper** – User-defined project space, isolated from the management domain.
+3. **mprj_io** – Handles the management of user GPIOs (I/O management and isolation).
+4. **housekeeping_spi** – Serial peripheral interface module for configuration and communication.
+
+---
+
+## 2. Signals That Cross the “Management Protect” Boundary
+
+Signals crossing from the management domain to the user domain (across the “Management Protect” boundary) include:
+
+- `mprj_adr_o`, `mprj_dat_o`, `mprj_we_o`, `mprj_sel_o` → Management to User Bus (Wishbone)
+- `mprj_ack_i`, `mprj_dat_i` → User to Management Bus response
+- Clock and reset signals shared across the boundary:
+  - `user_clock2`
+  - `user_resetn`
+- GPIO configuration control signals from management
+
+These signals are carefully gated and often pass through `mprj_io` or the wishbone bus fabric.
+
+---
+
+## 3. Synchronisation of Reset and Clock
+
+- The **reset** and **clock** signals are synchronised in the module `mgmt_core_wrapper`.
+- Within this wrapper:
+  - `resetb` (active-low reset) is synchronised and de-glitched before use.
+  - The management clock (`wb_clk_i`) is distributed to other modules.
+- Additionally, in some user modules like `user_project_wrapper`, a separate clock like `user_clock2` may be used, also routed from `caravel.v`.
