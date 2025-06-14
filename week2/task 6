@@ -1,0 +1,51 @@
+✅ Step-by-Step Packaging Guide
+📁 1. Organize Directory Structure
+In your project root, make sure you have this directory layout:
+
+bash
+Copy
+Edit
+mkdir -p week2/docs
+Then move or copy the required files into it:
+
+bash
+Copy
+Edit
+# Documentation
+cp docs/week2_notes.md week2/docs/
+cp docs/hierarchy.txt week2/docs/
+
+# RTL file list
+cp synopsys/filelist.f week2/synopsys/
+
+# Logs
+cp compile.log run.log week2/
+
+# Screenshot
+cp screenshot_run_log.png week2/
+📦 2. Final Folder Structure Should Look Like:
+lua
+Copy
+Edit
+vsdRiscvScl180/
+└── week2/
+    ├── docs/
+    │   ├── week2_notes.md
+    │   └── hierarchy.txt
+    ├── synopsys/
+    │   └── filelist.f
+    ├── compile.log
+    ├── run.log
+    └── screenshot_run_log.png
+📌 Replace screenshot_run_log.png with whatever filename you saved the terminal screenshot as.
+
+🚀 3. Submission Instructions
+Now, wait for your mentor’s instruction on how to submit:
+
+Submission Mode	Command / Action
+Git (Branch + PR)	git checkout -b week2_<yourname>
+git add week2/
+git commit -m "Week 2 submission"
+git push origin week2_<yourname> and create PR
+Zipped Archive	zip -r week2_submission.zip week2/ and send/upload the .zip
+Direct Upload	Use mentor’s platform or email as instructed
