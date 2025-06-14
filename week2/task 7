@@ -1,0 +1,24 @@
+✅ Final Submission Checklist for Week 2
+Requirement	Status
+✅ All Deep-Dive Questions in week2_notes.md	✔ Answered completely
+✅ hierarchy.txt copied to week2/docs/	✔ From VCS or alternative
+✅ filelist.f present	✔ Under week2/synopsys/
+✅ compile.log with zero errors	✔ Check: grep "Error:" compile.log should return nothing
+✅ run.log shows simulation ended cleanly	✔ Check: tail -n 10 run.log shows success
+✅ Screenshot of log end in week2/	✔ Clear and readable image
+✅ Folder structure is clean	✔ Matches expected layout
+✅ Submission sent before 15 June 23:59 IST	⏳ Ready to upload?
+
+📦 Folder Layout Recap
+lua
+Copy
+Edit
+week2/
+├── docs/
+│   ├── week2_notes.md
+│   └── hierarchy.txt
+├── synopsys/
+│   └── filelist.f
+├── compile.log
+├── run.log
+└── screenshot_run_log.png
