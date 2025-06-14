@@ -1,0 +1,60 @@
+🗂️ 1. Create the File List
+Make a file called synopsys/filelist.f. This should list all RTL source files under the rtl/ directory.
+
+If you're in the project root, run:
+
+bash
+Copy
+Edit
+find rtl/ -name "*.v" > synopsys/filelist.f
+✅ Tip: If you're using SystemVerilog files (.sv), add those too:
+
+bash
+Copy
+Edit
+find rtl/ \( -name "*.v" -o -name "*.sv" \) > synopsys/filelist.f
+🧾 2. Compile the Design Using VCS
+Run the following commands one by one:
+
+bash
+Copy
+Edit
+# Step 1: Compile the RTL
+vlogan -full64 -sverilog +incdir+rtl -f synopsys/filelist.f
+
+# Step 2: Elaborate and build the simulation binary
+vcs -full64 -debug_access+all -sverilog \
++lint=all -timescale=1ns/1ps \
+-f synopsys/filelist.f tb/caravel_boot_tb.v \
+-l compile.log -o simv
+Check compile.log to confirm compilation succeeded without errors.
+
+▶️ 3. Run the Simulation
+bash
+Copy
+Edit
+./simv +clk_period=10ns -l run.log
+This runs the simulation using simv and logs output to run.log.
+
+📸 4. Take a Screenshot
+After the simulation finishes, display the last 10 lines of the log:
+
+bash
+Copy
+Edit
+tail -n 10 run.log
+You should see messages like:
+
+txt
+Copy
+Edit
+*** Simulation finished ***
+VCS Simulation has completed
+📸 Take a screenshot of this terminal output showing these last 10 lines. This is proof that the simulation ran to completion without fatal errors.
+
+✅ Recap Checkpoints
+Task	Status
+filelist.f created	✅
+Compilation (vlogan, vcs)	✅ compile.log
+Simulation ran (simv)	✅ run.log
+Screenshot of run.log tail	📸 Required
