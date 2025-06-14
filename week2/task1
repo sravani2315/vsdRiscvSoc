@@ -1,1 +1,44 @@
+✅ 1. SCL 180 nm PDK installed and environment variables exported
+PDK Installation: Ensure the Standard Cell Library for SCL 180nm technology is installed correctly.
 
+Environment Variables: These usually include paths to the PDK libraries, setup files, and tech files.
+
+Common example in your .bashrc or .bash_profile:
+
+bash
+Copy
+Edit
+export SCL_HOME=/path/to/scl_180nm_pdk
+export PDK_PATH=$SCL_HOME
+source $SCL_HOME/setup/env.csh  # or env.sh depending on your shell
+✅ 2. Synopsys VCS & Design Compiler available on your PATH
+Confirm by running:
+
+bash
+
+which vcs
+which dc_shell
+If these return valid paths, the tools are available in your PATH.
+
+If not, add Synopsys tools to your PATH:
+
+bash
+
+export PATH=/path/to/synopsys/vcs/bin:$PATH
+export PATH=/path/to/synopsys/dc/bin:$PATH
+✅ 3. vsdRiscvScl180 project cloned locally and Week 1 smoke-test simulation working
+You should have the GitHub project cloned:
+
+bash
+git clone https://github.com/<username>/vsdRiscvScl180.git
+cd vsdRiscvScl180
+Smoke Test: Week 1 simulation usually involves verifying RTL (possibly a simple RISC-V core or controller) to ensure the environment is working. You can usually run something like:
+
+bash
+make run_week1_smoke_test
+
+or manually:
+
+bash
+vcs -full64 -sverilog rtl/top.v tb/top_tb.v -o simv
+./simv
