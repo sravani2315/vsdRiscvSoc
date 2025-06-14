@@ -1,0 +1,65 @@
+📘 week2_notes.md (continued)
+markdown
+Copy
+Edit
+# Week 2 Notes – Deep-Dive Checklist
+
+---
+
+## 🔌 1. padframe
+**Source file(s):**  
+- `rtl/padframe.v`
+
+**Notes:**
+- **Pad-type variants found:**
+  1. `gpio_pad` – used for general-purpose I/O pins.
+  2. `flash_pad` – used for SPI flash interface.
+
+**Purpose Summary:**  
+The padframe acts as an interface between internal logic and the external world, handling voltage translation, ESD protection, and proper signal driving. It determines how each I/O behaves (input, output, bidirectional) and connects to either the management or user domain.
+
+---
+
+## 🔄 2. housekeeping
+**Source file(s):**  
+- `rtl/housekeeping/spi_master.v`  
+- `rtl/housekeeping/spi_master_define.vh` (for config/macros)
+
+**Notes:**
+- **SPI clock pin name:** `sck`
+- **SPI chip select (CSB) pin name:** `csb`
+- **Default SPI mode:** Mode **0**  
+  (SPI Mode 0: CPOL=0, CPHA=0 → Clock idle low, data latched on rising edge)
+
+**Purpose Summary:**  
+The housekeeping SPI module handles communication with external tools (e.g., for programming or debugging). It responds to commands like register access, configuration, and reset. It supports standard SPI protocol compatible with Mode 0 by default.
+
+---
+
+## 🧠 3. management_soc_wrapper
+**Source file(s):**  
+- All files under `rtl/mgmt_soc/`
+
+**Notes:**
+- **Wishbone bus data-width:** `32 bits`
+- **IRQ fan-in size:** `32 interrupt lines`
+
+**Purpose Summary:**  
+The `management_soc_wrapper` is the brain of the management side, which controls programming, test interfaces, and coordinates user project interactions. It connects to internal modules using a 32-bit Wishbone bus and handles up to 32 different interrupt sources.
+
+---
+
+## 📦 4. user_project_wrapper
+**Source file(s):**  
+- `rtl/user_project_wrapper.v`
+
+**Notes:**
+- **User-controllable GPIO count:** `38 GPIOs`  
+  These are accessible and controllable from within the user's logic.
+- **User clock source:** `user_clock2`  
+  This is a dedicated clock routed from the management domain into the user project.
+
+**Purpose Summary:**  
+This module is a placeholder for user logic. It interfaces cleanly with the rest of the SoC, receiving clock/reset from the top module and interacting with peripherals through GPIO and Wishbone if enabled.
+
+---
